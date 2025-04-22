@@ -1,8 +1,11 @@
 // import { useState } from 'react'
 import './App.css'
+import DisplayPosts from './components/DisplayPosts'
 
 function App() {
+  // const [post, setPosts] = useState([])
 
+  // Sample data
   const posts = [
     {
       "id": 65,
@@ -42,22 +45,9 @@ function App() {
     }
   ]
 
-  const postsList = posts.map((post) => {
-    return (
-      <div key={post.id}>
-        <h2>{post.title}</h2>
-        <p>{post.content}</p>
-        {post.image_url && <img src={post.image_url} alt="Post" />}
-        <p>Upvotes: {post.upvotes}</p>
-        <p>Comments: {post.comments.join(", ")}</p>
-      </div>
-    )
-  })
-
   return (
     <div>
-      <h1>Posts</h1>
-      {postsList}
+      <DisplayPosts posts={posts} />
     </div>
   )
 }

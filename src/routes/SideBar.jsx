@@ -11,7 +11,7 @@ const SideBar = () => {
                     <ul>
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/login">Login</Link></li>
-                        <li><Link to="/createnewpost">Create New Post</Link></li>
+                        <li><Link to="/createpost">Create New Post</Link></li>
                         <li><Link to="/register">Register</Link></li>
                     </ul>
                 </nav>
