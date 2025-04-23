@@ -39,6 +39,7 @@ const CreatePost = () => {
                         upvotes: 0,
                         comments: []
                     });
+                    alert("Post created successfully!");
                 }
             });
     }
