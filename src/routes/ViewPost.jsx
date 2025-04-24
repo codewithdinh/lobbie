@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../client';
 
 const ViewPost = () => {
@@ -8,6 +8,7 @@ const ViewPost = () => {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [newComment, setNewComment] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -44,24 +45,39 @@ const ViewPost = () => {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim() === '') return;
-        
+
         if (post) {
             // Create a new array with existing comments plus the new one
             const updatedComments = [...post.comments, newComment];
-            
+
             // Update post in Supabase
             const { error } = await supabase
                 .from('posts')
                 .update({ comments: updatedComments })
                 .eq('id', post.id);
-                
+
             if (error) {
                 console.error('Error adding comment:', error);
             } else {
                 // Update local state to show the new comment
-                setPost({...post, comments: updatedComments});
+                setPost({ ...post, comments: updatedComments });
                 // Clear the comment input
                 setNewComment('');
+            }
+        }
+    }
+
+    const handleDeletePost = async () => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+        if (confirmDelete) {
+            const { error } = await supabase
+                .from('posts')
+                .delete()
+                .eq('id', post.id);
+            if (error) {
+                console.error('Error deleting post:', error);
+            } else {
+                navigate('/'); // Redirect to posts page after deletion
             }
         }
     }
@@ -72,19 +88,28 @@ const ViewPost = () => {
                 <p>Loading...</p>
             ) : post ? (
                 <div className="post-details">
+                    
                     <h1>{post.title}</h1>
                     {post.image_url && <img src={post.image_url} alt={post.title} />}
                     <p>{post.content}</p>
                     <p>Upvotes: {post.upvotes}</p>
-                    <button onClick={handleUpvote}>Upvote</button>
                     
+                    {/* Edit post */}
+                    <button onClick={() => navigate(`/posts/edit/${post.id}`)}>Edit Post</button>
+                    
+                    {/* Delete post */}
+                    <button onClick={handleDeletePost}>Delete Post</button>
+
+                    {/* Upvote button */}
+                    <button onClick={handleUpvote}>Upvote</button>
+
                     <h2>Comments:</h2>
                     <ul>
                         {post.comments.map((comment, index) => (
                             <li key={index}>{comment}</li>
                         ))}
                     </ul>
-                    
+
                     {/* New Comment Form */}
                     <div className="comment-form">
                         <h3>Add a Comment</h3>
