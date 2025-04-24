@@ -1,4 +1,7 @@
-const DisplayPosts = ( {posts} ) => {
+import { useState } from 'react';
+
+const DisplayPosts = ({ posts }) => {
+    const [sortBy, setSortBy] = useState('time'); 
 
     // Function to calculate the time since the post was created
     const timeSince = (date) => {
@@ -22,21 +25,48 @@ const DisplayPosts = ( {posts} ) => {
         window.location.href = `/posts/${postId}`;
     }
 
-    const postsList = posts.map((post) => {
+    // Sort posts based on the selected criteria
+    const sortedPosts = [...posts].sort((a, b) => {
+        if (sortBy == 'time') {
+            return new Date(b.created_at) - new Date(a.created_at);
+        } else if (sortBy == 'upvotes') {
+            return b.upvotes - a.upvotes;
+        }
+    })
+
+    const postsList = sortedPosts.map((post) => {
         return (
             <div key={post.id} onClick={() => handleClick(post.id)}>
-            <h2>{post.title}</h2>
-            <p>Posted {timeSince(post.created_at)}</p>
-            <p>Upvotes: {post.upvotes}</p>
+                <p>Posted {timeSince(post.created_at)}</p>
+                <h2><strong>{post.title}</strong></h2>
+                <p>{post.upvotes} upvotes</p>
             </div>
         )
-    })
+    });
     
     return (
         <div>
-            {postsList} {/* Render the list of posts */}
+            <div className="sort-controls">
+                <button 
+                    className={sortBy === 'time' ? 'active' : ''} 
+                    onClick={() => setSortBy('time')}
+                >
+                    Sort by Time
+                </button>
+                <button 
+                    className={sortBy === 'upvotes' ? 'active' : ''} 
+                    onClick={() => setSortBy('upvotes')}
+                >
+                    Sort by Upvotes
+                </button>
+            </div>
+            <div className="posts-container">
+                {postsList}
+            </div>
+            {/* Add a message if there are no posts */}
+            {posts.length === 0 && <p>No posts available.</p>}
         </div>
-    )
+    );
 }
 
-export default DisplayPosts
+export default DisplayPosts;
