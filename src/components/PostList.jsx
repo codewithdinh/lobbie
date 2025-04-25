@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const DisplayPosts = ({ posts }) => {
+const PostList = ({ posts }) => {
     const [sortBy, setSortBy] = useState('time'); 
 
     // Function to calculate the time since the post was created
@@ -27,19 +27,35 @@ const DisplayPosts = ({ posts }) => {
 
     // Sort posts based on the selected criteria
     const sortedPosts = [...posts].sort((a, b) => {
-        if (sortBy == 'time') {
+        if (sortBy === 'time') {
             return new Date(b.created_at) - new Date(a.created_at);
-        } else if (sortBy == 'upvotes') {
+        } else if (sortBy === 'upvotes') {
             return b.upvotes - a.upvotes;
         }
-    })
+        return 0;
+    });
 
     const postsList = sortedPosts.map((post) => {
         return (
-            <div key={post.id} onClick={() => handleClick(post.id)}>
-                <p>Posted {timeSince(post.created_at)}</p>
-                <h2><strong>{post.title}</strong></h2>
-                <p>{post.upvotes} upvotes</p>
+            <div key={post.id} className="post-card" onClick={() => handleClick(post.id)}>
+                <div className="post-time">Posted {timeSince(post.created_at)}</div>
+                <h2 className="post-title">{post.title}</h2>
+                {post.content && (
+                    <p className="post-content">
+                        {post.content.length > 150 
+                            ? post.content.substring(0, 150) + '...' 
+                            : post.content
+                        }
+                    </p>
+                )}
+                <div className="post-stats">
+                    <div className="upvote-count">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4L3 15H21L12 4Z" fill="currentColor" />
+                        </svg>
+                        {post.upvotes} upvotes
+                    </div>
+                </div>
             </div>
         )
     });
@@ -51,22 +67,26 @@ const DisplayPosts = ({ posts }) => {
                     className={sortBy === 'time' ? 'active' : ''} 
                     onClick={() => setSortBy('time')}
                 >
-                    Sort by Time
+                    Latest Posts
                 </button>
                 <button 
                     className={sortBy === 'upvotes' ? 'active' : ''} 
                     onClick={() => setSortBy('upvotes')}
                 >
-                    Sort by Upvotes
+                    Most Upvoted
                 </button>
             </div>
             <div className="posts-container">
                 {postsList}
             </div>
             {/* Add a message if there are no posts */}
-            {posts.length === 0 && <p>No posts available.</p>}
+            {posts.length === 0 && (
+                <div className="empty-state">
+                    <p>No posts available. Be the first to create a post!</p>
+                </div>
+            )}
         </div>
     );
 }
 
-export default DisplayPosts;
+export default PostList;

@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import DisplayPosts from './components/DisplayPosts'
+import PostList from './components/PostList'
 import { supabase } from './client'
 
 function App() {
   const [post, setPost] = useState({
-          title: '',
-          content: '',
-          image_url: '',
-          upvotes: 0,
-          comments: []
-      });
+    title: '',
+    content: '',
+    image_url: '',
+    upvotes: 0,
+    comments: []
+  });
 
   const [loading, setLoading] = useState(true)
-  
+
   useEffect(() => {
 
     const fetchPosts = async () => {
@@ -31,13 +31,13 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="main-content">
       {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <div>
-          <DisplayPosts posts={post} />
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
         </div>
+      ) : (
+        <PostList posts={post} />
       )}
     </div>
   )

@@ -47,10 +47,7 @@ const PostDetail = () => {
         if (newComment.trim() === '') return;
 
         if (post) {
-            // Create a new array with existing comments plus the new one
             const updatedComments = [...post.comments, newComment];
-
-            // Update post in Supabase
             const { error } = await supabase
                 .from('posts')
                 .update({ comments: updatedComments })
@@ -59,9 +56,7 @@ const PostDetail = () => {
             if (error) {
                 console.error('Error adding comment:', error);
             } else {
-                // Update local state to show the new comment
                 setPost({ ...post, comments: updatedComments });
-                // Clear the comment input
                 setNewComment('');
             }
         }
@@ -77,58 +72,109 @@ const PostDetail = () => {
             if (error) {
                 console.error('Error deleting post:', error);
             } else {
-                navigate('/'); // Redirect to posts page after deletion
+                navigate('/');
             }
         }
     }
 
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
+
+    if (!post) {
+        return (
+            <div className="error-container">
+                <h2>Post not found</h2>
+                <p>The post you're looking for doesn't exist or has been removed.</p>
+                <button onClick={() => navigate('/')} className="primary">Back to Home</button>
+            </div>
+        );
+    }
+
     return (
-        <div>
-            {loading ? (
-                <p>Loading...</p>
-            ) : post ? (
-                <div className="post-details">
-                    <div>
-                        <h1>{post.title}</h1>
-                        {post.image_url && <img src={post.image_url} alt={post.title} />}
-                        <p>{post.content}</p>
-                        <p>Upvotes: {post.upvotes}</p>
-                    </div>
-
-                    <div>
-                        <h2>Comments:</h2>
-                        <ul>
-                            {post.comments.map((comment, index) => (
-                                <li key={index}>{comment}</li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="comment-form">
-                        <h3>Add a Comment</h3>
-                        <form onSubmit={handleCommentSubmit}>
-                            <textarea
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                placeholder="Write your comment here..."
-                                rows="3"
-                                required
-                            ></textarea>
-                            <button type="submit">Post Comment</button>
-                        </form>
-                    </div>
-
-                    <div>
-                        <button onClick={() => navigate(`/posts/edit/${post.id}`)}>Edit Post</button>
-                        <button onClick={handleDeletePost}>Delete Post</button>
-                        <button onClick={handleUpvote}>Upvote</button>
+        <div className="post-detail-container">
+            <div className="post-detail-card">
+                <div className="post-header">
+                    <h1 className="post-title">{post.title}</h1>
+                    <div className="post-meta">
+                        <span className="post-time">Posted {new Date(post.created_at).toLocaleDateString()}</span>
+                        <div className="post-actions">
+                            <button 
+                                onClick={() => navigate(`/posts/edit/${post.id}`)} 
+                                className="icon-button"
+                                title="Edit Post"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16.474 5.408l2.118 2.117m-.756-3.982L12.109 9.27a2.118 2.118 0 00-.58 1.082L11 13l2.648-.53c.41-.082.786-.283 1.082-.579l5.727-5.727a1.853 1.853 0 000-2.621 1.853 1.853 0 00-2.621 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M19 15v3a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                            <button 
+                                onClick={handleDeletePost} 
+                                className="icon-button danger"
+                                title="Delete Post"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            ) : (
-                <p>Post not found.</p>
-            )}
+
+                {post.image_url && (
+                    <div className="post-image">
+                        <img src={post.image_url} alt={post.title} />
+                    </div>
+                )}
+
+                <div className="post-content">
+                    <p>{post.content}</p>
+                </div>
+
+                <div className="post-interactions">
+                    <button onClick={handleUpvote} className="upvote-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4L3 15H21L12 4Z" fill="currentColor" />
+                        </svg>
+                        <span>{post.upvotes} Upvotes</span>
+                    </button>
+                </div>
+
+                <div className="comments-section">
+                    <h2>Comments ({post.comments.length})</h2>
+                    {post.comments.length > 0 ? (
+                        <ul className="comments-list">
+                            {post.comments.map((comment, index) => (
+                                <li key={index} className="comment-item">
+                                    <div className="comment-content">
+                                        <p>{comment}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="no-comments">No comments yet. Be the first to comment!</p>
+                    )}
+
+                    <form onSubmit={handleCommentSubmit} className="comment-form">
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Write your comment here..."
+                            rows="3"
+                            required
+                        ></textarea>
+                        <button type="submit" className="primary">Post Comment</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 
 export default PostDetail;
