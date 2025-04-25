@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import { supabase } from '../client';
 
-
 const CreatePost = () => {
     const [post, setPost] = useState({
         title: '',
@@ -31,7 +30,6 @@ const CreatePost = () => {
                     console.error("Error creating post:", error);
                 } else {
                     console.log("Post created successfully:", data);
-                    // Optionally reset the form or redirect
                     setPost({
                         title: '',
                         content: '',
@@ -44,33 +42,33 @@ const CreatePost = () => {
             });
     }
 
-
     return (
-        <div>
+        <div className="card">
             <h1>Create New Post</h1>
-            {/* Add form or other components here */}
             <form onSubmit={createPost}>
                 <input
                     type="text"
                     name="title"
-                    placeholder="Title"
+                    placeholder="Enter a catchy title..."
                     value={post.title}
                     onChange={handleChange}
+                    required
                 />
                 <textarea
                     name="content"
-                    placeholder="Content"
+                    placeholder="Share your thoughts..."
                     value={post.content}
                     onChange={handleChange}
+                    rows="5"
                 ></textarea>
                 <input
                     type="text"
                     name="image_url"
-                    placeholder="Image URL"
+                    placeholder="Add an image URL (optional)"
                     value={post.image_url}
                     onChange={handleChange}
                 />
-                <button type="submit">Create Post</button>
+                <button type="submit">Post to Community</button>
             </form>
         </div>
     );

@@ -7,6 +7,8 @@ import SideBar from './routes/SideBar.jsx'
 import Login from './routes/Login.jsx'
 import Register from './routes/Register.jsx'
 import CreatePost from './routes/CreatePost.jsx'
+import ViewPost from './routes/ViewPost.jsx'
+import EditPost from './routes/EditPost.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,6 +19,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/login" element={<Login />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/posts/:id" element={<ViewPost />} />
+          <Route path="/posts/edit/:id" element={<EditPost />} />
           {/* Add more routes as needed */}
         </Route>
       </Routes>

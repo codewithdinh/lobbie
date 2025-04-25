@@ -58,32 +58,52 @@ const EditPost = () => {
     }
 
     return (
-        <div>
-
-            <h1>Edit Post</h1>
-            <form onSubmit={createPost}>
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    value={post.title}
-                    onChange={handleChange}
-                />
-                <textarea
-                    name="content"
-                    placeholder="Content"
-                    value={post.content}
-                    onChange={handleChange}
-                ></textarea>
-                <input
-                    type="text"
-                    name="image_url"
-                    placeholder="Image URL"
-                    value={post.image_url}
-                    onChange={handleChange}
-                />
-                <button type="submit">Update Post</button>
-            </form>
+        <div className="page-container">
+            <div className="form-card">
+                <h1 className="form-title">Edit Post</h1>
+                
+                <form onSubmit={createPost} className="post-form">
+                    <div className="form-group">
+                        <label htmlFor="title">Title</label>
+                        <input
+                            id="title"
+                            type="text"
+                            name="title"
+                            placeholder="Enter a descriptive title"
+                            value={post.title}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="content">Content</label>
+                        <textarea
+                            id="content"
+                            name="content"
+                            placeholder="Share your thoughts..."
+                            value={post.content}
+                            onChange={handleChange}
+                        ></textarea>
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="image_url">Image URL</label>
+                        <input
+                            id="image_url"
+                            type="text"
+                            name="image_url"
+                            placeholder="https://example.com/image.jpg"
+                            value={post.image_url}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    
+                    <div className="form-actions">
+                        <button type="button" className="secondary" onClick={() => navigate('/')}>Cancel</button>
+                        <button type="submit" className="primary">Update Post</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
