@@ -15,7 +15,6 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-
     const fetchPosts = async () => {
       const { data, error } = await supabase
         .from('posts')

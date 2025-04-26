@@ -69,9 +69,10 @@ const EditPost = () => {
                             id="title"
                             type="text"
                             name="title"
-                            placeholder="Enter a descriptive title"
+                            placeholder="Enter a catchy title..."
                             value={post.title}
                             onChange={handleChange}
+                            required
                         />
                     </div>
                     
