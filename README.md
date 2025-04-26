@@ -1,8 +1,8 @@
-# Web Development Final Project - *Name of App Here*
+# Web Development Final Project - *Lobbie*
 
-Submitted by: **Your Name Here**
+Submitted by: **Dinh Thien Bui**
 
-This web app: **insert description**
+This web app: **Lobbie is a modern discussion platform where users can share ideas, post content, and engage with others through upvotes and comments. With a clean, intuitive interface and customizable themes, Lobbie makes it easy to create and discover interesting discussions.**
 
 Time spent: **8** hours spent in total
 
@@ -52,7 +52,7 @@ The following **optional** features are implemented:
 - [ ] Users can repost a previous post by referencing its post ID. On the post page of the new post
   - Users can repost a previous post by referencing its post ID
   - On the post page of the new post, the referenced post is displayed and linked, creating a thread
-- [ ] Users can customize the interface
+- [x] Users can customize the interface
   - e.g., selecting the color scheme or showing the content and image of each post on the home feed
 - [ ] Users can add more characterics to their posts
   - Users can share and view web videos
@@ -69,10 +69,10 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='Demo_Lobbie.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
-GIF created with ...  
+GIF created with LICECap for Windows 
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS
 [ScreenToGif](https://www.screentogif.com/) for Windows
@@ -84,7 +84,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2025] [Dinh Thien Bui]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
