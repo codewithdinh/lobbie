@@ -9,7 +9,7 @@ const PostDetail = () => {
     const [loading, setLoading] = useState(true);
     const [newComment, setNewComment] = useState('');
     const navigate = useNavigate();
-
+    console.log(id);
     useEffect(() => {
         const fetchPost = async () => {
             const { data, error } = await supabase
