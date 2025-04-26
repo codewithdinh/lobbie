@@ -1,23 +1,32 @@
 import { useState } from 'react';
+import './PostList.css';
 
 const PostList = ({ posts }) => {
     const [sortBy, setSortBy] = useState('time'); 
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Function to calculate the time since the post was created
     const timeSince = (date) => {
         const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+        
         let interval = Math.floor(seconds / 31536000);
-        if (interval > 1) return interval + " years ago";
+        if (interval >= 1) return interval + (interval === 1 ? " year ago" : " years ago");
+        
         interval = Math.floor(seconds / 2592000);
-        if (interval > 1) return interval + " months ago";
+        if (interval >= 1) return interval + (interval === 1 ? " month ago" : " months ago");
+    
         interval = Math.floor(seconds / 86400);
-        if (interval > 1) return interval + " days ago";
+        if (interval >= 1) return interval + (interval === 1 ? " day ago" : " days ago");
+    
         interval = Math.floor(seconds / 3600);
-        if (interval > 1) return interval + " hours ago";
+        if (interval >= 1) return interval + (interval === 1 ? " hour ago" : " hours ago");
+    
         interval = Math.floor(seconds / 60);
-        if (interval > 1) return interval + " minutes ago";
-        return seconds + " seconds ago";
+        if (interval >= 1) return interval + (interval === 1 ? " minute ago" : " minutes ago");
+    
+        return seconds + (seconds === 1 ? " second ago" : " seconds ago");
     }
+    
 
     // onClick function to direct to the post page
     const handleClick = (postId) => {
@@ -35,7 +44,12 @@ const PostList = ({ posts }) => {
         return 0;
     });
 
-    const postsList = sortedPosts.map((post) => {
+    // Filter posts based on search query
+    const filteredPosts = sortedPosts.filter(post => 
+        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const postsList = filteredPosts.map((post) => {
         return (
             <div key={post.id} className="post-card" onClick={() => handleClick(post.id)}>
                 <div className="post-time">Posted {timeSince(post.created_at)}</div>
@@ -76,13 +90,22 @@ const PostList = ({ posts }) => {
                     Most Upvoted
                 </button>
             </div>
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="Search posts by title..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="search-input"
+                />
+            </div>
             <div className="posts-container">
                 {postsList}
             </div>
-            {/* Add a message if there are no posts */}
-            {posts.length === 0 && (
+            {/* Update empty state message to consider search */}
+            {filteredPosts.length === 0 && (
                 <div className="empty-state">
-                    <p>No posts available. Be the first to create a post!</p>
+                    <p>{searchQuery ? 'No posts found matching your search.' : 'No posts available. Be the first to create a post!'}</p>
                 </div>
             )}
         </div>
